@@ -34,10 +34,9 @@ func sourceFuncs() map[string][]string {
 		"crypto/elliptic": {"P224", "P256", "P384", "P521"},
 		"crypto/md5": {"New", "Sum"},
 		"crypto/sha1": {"New", "Sum"},
-		"crypto/sha256": {"New224", "Sum224", "New", "Sum256"},
-		"crypto/sha512": {"New", "Sum512", "New384", "Sum384", "New512_224", "Sum512_224", "New512_256", "Sum512_256"},
-		"golang.org/x/crypto/sha3": {"New224", "Sum224", "New256", "New384", "New512",  "Sum256", "Sum384", "Sum512",
-			"NewLegacyKeccak256", "NewLegacyKeccak512", "ShakeSum128", "ShakeSum256"},
+		"crypto/sha256": {"New224", "Sum224"},	//detect SHA256, Please add "New", "Sum256"
+		//"crypto/sha512": {"New", "Sum512", "New384", "Sum384", "New512_224", "Sum512_224", "New512_256", "Sum512_256"},	//detect SHA512, Please add this
+		"golang.org/x/crypto/sha3": {"New224", "Sum224"},	//detect SHA3-256、SHA3-384、SHA3-512, Please add "New256", "New384", "New512",  "Sum256", "Sum384", "Sum512", "NewLegacyKeccak256", "NewLegacyKeccak512", "ShakeSum128", "ShakeSum256"
 	}
 }
 
@@ -46,31 +45,31 @@ func functaint_out(t util.TaintedCode, function string) (string, string) {
 	output := "NULL"
 	if strings.Contains(t.SourceCode, "P224") {
 		message = "Danger: Don't use the elliptic \" P224 \" if ECDSA is used "
-		output = "3 - ECDSA_P224"
+		output = "ECDSA_P224"
 	} else if strings.Contains(t.SourceCode, "P256") {
 		message = "Best Practice: ECDSA with the elliptic \" P256 \""
-		output = "4 - ECDSA_P256"
+		output = "ECDSA_P256"
 	} else if strings.Contains(t.SourceCode, "P384") {
 		message = "High: High strength may affect performance, best practice is \" ECDSA_P256 \"."
-		output = "5 - ECDSA_P384"
+		output = "ECDSA_P384"
 	} else if strings.Contains(t.SourceCode, "P521") {
 		message = "High: High strength may affect performance, best practice is \" ECDSA_P256 \"."
-		output = "5 - ECDSA_P521"
+		output = "ECDSA_P521"
 	} else if strings.Contains(t.SourceFilename, "md5") {
 		message = "Danger: Don't use HMAC_MD5, best practice is \" HMAC-SHA256 \"."
-		output = "2 - HMAC_MD5"
+		output = "HMAC_MD5"
 	} else if strings.Contains(t.SourceFilename, "sha1") {
 		message = "Best Practice: HMAC_SHA1 can be uesd, and best practice is \" HMAC-SHA256 \"."
-		output = "4 - HMAC_SHA1"
+		output = "HMAC_SHA1"
 	} else if strings.Contains(t.SourceFilename, "sha256") {
 		message = "Best Practice"
-		output = "4 - HMAC_SHA256"
+		output = "HMAC_SHA256"
 	} else if strings.Contains(t.SourceFilename, "sha512") {
 		message = "High: High strength may affect performance, best practice is \" HMAC-SHA256 \"."
-		output = "5 - HMAC_SHA512"
+		output = "HMAC_SHA512"
 	} else if strings.Contains(t.SourceFilename, "sha3") {
 		message = "High: High strength may affect performance, best practice is \" HMAC-SHA256 \"."
-		output = "5 - HMAC_SHA3"
+		output = "HMAC_SHA3"
 	}
 	util.Cwelist[output] = true
 	return message,output
@@ -122,7 +121,7 @@ func funcRun(pass *analysis.Pass) (interface{}, error) {
 					targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
 					taintSource = taintAnalyzer.TaintSource
 					message,output := functaint_out(taintSource[0],fn)
-					util.Cwelist[output] = true
+					util.Cwelist["NULL"] = false
 					results = append(results, util.MakeFinding(message, targetFunc, taintSource, output))
 				}
 			}

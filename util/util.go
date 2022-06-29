@@ -26,8 +26,6 @@ import (
 	"os"
 	"runtime"
 	"strings"
-	//"strconv"
-	//"reflect"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/ssa"
 
@@ -65,16 +63,10 @@ type CallGraph map[string][]CGRelation
 func (cg CallGraph) AnalyzeFunctionO(fn *ssa.Function) {
 	for _, block := range fn.DomPreorder() {
 		for _, instr := range block.Instrs {
-			//fmt.Println("指令：",instr.String())
 			switch instr := instr.(type) {
 			case *ssa.Call:
 				if instr.Call.StaticCallee() != nil {
 					calleeName := instr.Call.StaticCallee().String()
-					//fmt.Println(reflect.TypeOf(instr))
-					//fmt.Println("更新调用图情况：calleeName = ", calleeName, "\t指令：",instr.String(), " , fn = ",fn.Name())
-					//calleeD := instr.Call.Description()
-					//fmt.Println("更新调用图情况：calleeName = ", calleeName, "\tCGRelation{ instr.Call.Value = ", instr.Call.Value, " , fn = ",fn.Name())
-					//fmt.Println("******", calleeD, "**********")
 					// Update the callgraph
 					cg[calleeName] = append(cg[calleeName], CGRelation{instr, fn})
 				}

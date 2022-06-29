@@ -49,40 +49,30 @@ func StripArguments(parentFunction string) string {
 	return strings.TrimSpace(functionName) + "(...)" + functionReturn
 }
 
-/*wening —— cwelist*/
 //var Cwelist map[string]bool
 var Cwelist = map[string]bool{
 	/*"CWE-326: Inadequate Encryption Strength":false,	//rsa.go
-	"CWE-327: Use of a Broken or Risky Cryptographic Algorithm":false,	//weakcrypto.go
-	"CWE-xxx: Generation of Constant IV with CBC Mode":false,	//aes.go
-	"CWE-xxx: warning L1024N160":false,	//dsa.go
-	"CWE-xxx: DSA is not randomly":false,	//dsa.go*/
+	"CWE-327: Use of a Broken or Risky Cryptographic Algorithm":false,	//weakcrypto.go */
 }
 
 // returns true if the finding was valid and false if the finding had the same source and sink
 func IsValidFinding(finding Finding) bool {
-//	fmt.Println("看看类型： ", finding.Type)
-	/*wening —— add without untrusted source*/
-	/*for _,cwe := range Cwelist {	//Cwelist []string
-		if finding.Type == cwe {
-			return true
-		}
-	}*/
 	if Cwelist[finding.Type] {	//Cwelist map[string]bool
 		return true
 	}
 
+	if finding.message == "NULL" {
+		return false
+	}
 	if len(finding.Untrusted_Source) == 0 {
 		return false
 	}
 	if finding.Vulnerable_Function.SourceCode == finding.Untrusted_Source[0].SourceCode {
 		// if the source and sink are the same, return false and do not print out the finding
-		//fmt.Println("让我看看会有啥是相同的： ", finding.Vulnerable_Function.SourceCode)
 		return false
 	}
 	// add filtering for findings with chan sources
 	if strings.Contains(finding.Untrusted_Source[0].SourceCode, "make(chan") {
-		//fmt.Println(finding.Untrusted_Source[0].SourceCode+"`````````````````````")
 		if Config.Debug {
 			log.Printf("Filtering Finding for Source: %s\n", finding.Untrusted_Source[0].SourceCode)
 		}

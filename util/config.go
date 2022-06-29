@@ -85,11 +85,9 @@ func LoadScanConfig() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := yaml.Unmarshal(configBytes, &ScanConfig); err != nil {	//就是这一步给 ScanConfig 赋的值
+	if err := yaml.Unmarshal(configBytes, &ScanConfig); err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Println("000: ",ScanConfig.Analyzers)
-	//fmt.Println("001: ",ScanConfig.Sources)	//含yml的内容
 
 	// If OldSrcs isn't nil, then the config file is in the old format and we unnest the values
 	if ScanConfig.Sources.OldSrcs != nil {
@@ -100,7 +98,7 @@ func LoadScanConfig() {
 		ScanConfig.Sources.OldSrcs = nil
 	}
 
-	if Config.Debug {	//得-d才开启，都是一些输出语句，没什么实际意义
+	if Config.Debug {
 		log.Println("Beginning list of default sources defined in yml:")
 		for pkg, fn := range ScanConfig.Sources.Functions {
 			log.Printf("Functions %s in package %s\n", fn, pkg)
@@ -119,16 +117,15 @@ func LoadScanConfig() {
 			}
 		}
 		log.Printf("\n\n")
-	}/*以下是yaml的具体信息*/
+	}
 	VulnGlobalVars = ScanConfig.Sources.Variables
 	VulnGlobalFuncs = ScanConfig.Sources.Functions
 	VulnTypes = ScanConfig.Sources.Types
-	//fmt.Println("112: ",ScanConfig.Analyzers)
 }
 
 // InitConfig() parses the flags and sets the corresponding Config variables
 func InitConfig(globals bool, sarif bool, json bool, verbose bool, debug bool, output_path string, yml string, exitCode bool) {
-	if yml == "" {	//走进该条件
+	if yml == "" {
 		yml = getDefaultConfigPath()
 	} else if _, err := os.Stat(yml); err != nil {
 		log.Fatalf("failed to find the provided config file at %s: %v", yml, err)
@@ -140,7 +137,7 @@ func InitConfig(globals bool, sarif bool, json bool, verbose bool, debug bool, o
 	Config.GlobalsSafe = !globals
 	Config.OutputSarif = sarif
 	Config.OutputJSON = json
-	Config.Debug = debug	//得-d才开启
+	Config.Debug = debug
 	Config.Verbose = verbose
 	Config.ExitCode = exitCode
 	Config.OutputPath = ""
@@ -154,7 +151,6 @@ func InitConfig(globals bool, sarif bool, json bool, verbose bool, debug bool, o
 	}
 	Config.YMLPath = yml
 	LoadScanConfig()
-	//fmt.Println("122: ",ScanConfig.Analyzers)
 }
 
 // getDefaultConfigPath gets the path to the default configuration file and creates it if it doesn't yet exist.
@@ -163,24 +159,20 @@ func getDefaultConfigPath() string {
 	yamlPath := filepath.Join(configDir, "analyzers.yml")
 	//yamlPath =  /root/.gokart/analyzers.yml
 
-	//下面只做了新建，没做覆盖
 	// If ~/.gokart/analyzers.yml doesn't exist, create it with the default config
 	if _, err := os.Stat(yamlPath); os.IsNotExist(err) {
 		fmt.Printf("Initializing default config at %s\n", yamlPath)
-		if err := ioutil.WriteFile(yamlPath, DefaultAnalyzersContent, 0o744); err != nil {	//路径、内容、权限
+		if err := ioutil.WriteFile(yamlPath, DefaultAnalyzersContent, 0o744); err != nil {
 			log.Fatalf("failed to write default config to %s: %v", yamlPath, err)
 		}
-		//fmt.Println("111111")
 	} else if err != nil {
 		// If the error returned by os.Stat is not ErrNotExist
 		log.Fatalf("failed to initialize default config: %v", err)
-		//fmt.Println("22222")
-	} else {	//wening
+	} else {
 		fmt.Printf("Rewriting default config at %s\n", yamlPath)
-		if err := ioutil.WriteFile(yamlPath, DefaultAnalyzersContent, 0o744); err != nil {	//路径、内容、权限
+		if err := ioutil.WriteFile(yamlPath, DefaultAnalyzersContent, 0o744); err != nil {
 			log.Fatalf("failed to write default config to %s: %v", yamlPath, err)
 		}
-		//fmt.Println("33333")
 	}
 	return yamlPath
 }

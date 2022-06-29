@@ -65,10 +65,6 @@ sources:
       - "Lookup"
       - "LookupId"
       - "Current"
-  #  "crypto/aes":
-   #   - "NewCipher"
-    #"crypto/rsa":
-     # - "EncryptPKCS1v15"
     "crypto/x509":
       - "Subjects"
     "io":

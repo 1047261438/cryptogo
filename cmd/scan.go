@@ -18,7 +18,6 @@ Package cmd implements a simple command line interface using cobra
 package cmd
 
 import (
-	//"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -61,10 +60,9 @@ Scans a Go module directory. To scan the current directory recursively, use goka
 		json, _ := cmd.Flags().GetBool("json")
 		globals, _ := cmd.Flags().GetBool("globalsTainted")
 		verbose, _ := cmd.Flags().GetBool("verbose")
-		debug, _ := cmd.Flags().GetBool("debug")	//开启yaml的输出，无实际意义
+		debug, _ := cmd.Flags().GetBool("debug")
 		exitCode, _ := cmd.Flags().GetBool("exitCode")
 		util.InitConfig(globals, sarif, json, verbose, debug, outputPath, yml, exitCode)
-		//fmt.Println("111: ",util.ScanConfig.Analyzers)
 		// If remoteModule was set, clone the remote repository and scan it
 		if len(remoteModule) != 0 {
 			moduleTempDir, err := ioutil.TempDir(".", "gokart")
