@@ -13,8 +13,8 @@ import (
 )
 
 var TLSAnalyzer = &analysis.Analyzer{
-	Name:     "tls_crypto",
-	Doc:      "reports when weak tls is used",
+	Name:     "SSL/TLS",
+	Doc:      "focus on the cryptographic use of SSL/TLS applications",
 	Run:      tlsRun,
 	Requires: []*analysis.Analyzer{buildssa.Analyzer},
 }
@@ -73,10 +73,10 @@ func (fc FuncCheck) AnalyzeFunction(fn *ssa.Function){
 					for _, re := range *instr.Referrers() {
 						funcFlat[re.String()] = "uint16"
 						if(strings.Contains((*instr.Referrers())[0].String(),"769")) {
-							fmt.Printf("\033[1;37;41m%s\033[0m\n","TLS1.0：")
+							fmt.Printf("\033[1;37;41m%s\033[0m\n","Weak SSL/TLS protocols: TLS1.0：")
 							fmt.Println(instr.String(), "Referrers：",(*instr.Referrers()))
 						} else if(strings.Contains((*instr.Referrers())[0].String(),"770")) {
-							fmt.Printf("\033[1;37;44m%s\033[0m\n","TLS1.1：")
+							fmt.Printf("\033[1;37;44m%s\033[0m\n","Weak SSL/TLS protocols: TLS1.1：")
 							fmt.Println(instr.String(), "Referrers：",(*instr.Referrers()))
 						} else if(strings.Contains((*instr.Referrers())[0].String(),"771")) {
 							fmt.Printf("\033[1;37;45m%s\033[0m\n","TLS1.2：")
@@ -96,7 +96,7 @@ func (fc FuncCheck) AnalyzeFunction(fn *ssa.Function){
 							for _, attr := range funcContent.Attr["CipherSuites"] {
 								s := "*" + instr.Name() + " = " + strconv.Itoa(attr) + ":uint16"
 								if(strings.Contains((*instr.Referrers())[0].String(),s)) {
-									fmt.Printf("\033[1;37;43m%s\033[0m\n","CipherSuites: ")
+									fmt.Printf("\033[1;37;43m%s\033[0m\n","Insecure CipherSuites: ")
 									fmt.Println(instr.String(), "Name = ",instr.X.Name(), "Referrers：",instr.Referrers())
 								}
 							}

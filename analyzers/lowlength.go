@@ -29,8 +29,8 @@ var RECOMMENDED_KEYLEN_ string
 // vulnerableFuncsH() returns a map of functions that generate keys
 func vulnerableFuncsH() (map[string][]int64, map[string][]int, map[string][]string, map[string]string){
 	return map[string][]int64 {
-			"crypto/rsa": {512,1024,2048},	// 4096,7680,15360
-			"crypto/dsa": {1,2,3,4},
+			"crypto/rsa": {512,1024,2048},	// 3072,4096,7680,15360
+			"crypto/dsa": {1,2,3},	//4 : L3072N256
 			"crypto/des": {16,32},
 		}, map[string][]int{
 			"crypto/rsa": {1,2},
@@ -41,9 +41,9 @@ func vulnerableFuncsH() (map[string][]int64, map[string][]int, map[string][]stri
 			"crypto/dsa": {"GenerateParameters"},
 			"crypto/des": {"NewTripleDESCipher"},
 		} , map[string]string{
-			"crypto/rsa": "RSA - CWE-326: Inadequate Encryption Strength",
-			"crypto/dsa": "DSA - CWE-326: Inadequate Encryption Strength",
-			"crypto/des": "2TDEA - CWE-326: Inadequate Encryption Strength",
+			"crypto/rsa": "RSA-512 and RSA-1024 is insecure, RSA-2048 is Acceptable but not recommended.",
+			"crypto/dsa": "DSA-1024 is insecure, DSA-2048 is Acceptable but not recommended.",
+			"crypto/des": "2TDEA is insecure.",
 		}
 }
 
@@ -132,7 +132,7 @@ func keylen_check(pass *analysis.Pass, keylen ssa.Value, cg util.CallGraph) bool
 		callFunc, ok := (keylen.Call.Value).(*ssa.Function)
 		if ok {
 			globalPkgNamePart := callFunc.Pkg.Pkg.Name()
-			if(globalPkgNamePart == "des") {
+			if(globalPkgNamePart == "DES") {
 				util.DESFlat =true
 				fmt.Println("************", globalPkgNamePart)
 			}
@@ -153,9 +153,9 @@ func keylen_check(pass *analysis.Pass, keylen ssa.Value, cg util.CallGraph) bool
 	case *ssa.Convert:
 		if(util.DESFlat == true) {
 			if(strings.Count(keylen.X.Name(),"")-10 < 32) {
-				fmt.Println("EDE2 ", keylen.X.Name(), " : ", strings.Count(keylen.X.Name(),""))
+				fmt.Println("2TDEA ", keylen.X.Name(), " : ", strings.Count(keylen.X.Name(),""))
 			} else {
-				fmt.Println("EDE3 ", keylen.X.Name(), " : ", strings.Count(keylen.X.Name(),""))
+				fmt.Println("3TDEA", keylen.X.Name(), " : ", strings.Count(keylen.X.Name(),""))
 			}
 			util.DESFlat = false
 			unsafe = true
@@ -164,9 +164,9 @@ func keylen_check(pass *analysis.Pass, keylen ssa.Value, cg util.CallGraph) bool
 		if(util.DESFlat == true) {
 			len,_ := strconv.Atoi(keylen.String()[5:7])
 			if(len < 32) {
-				fmt.Println("[EDE2] instr: ", keylen.String())
+				fmt.Println("[2TDEA] instr: ", keylen.String())
 			} else {
-				fmt.Println("[EDE3] instr: ", keylen.String())
+				fmt.Println("[3TDEA] instr: ", keylen.String())
 			}
 			util.DESFlat = false
 		}

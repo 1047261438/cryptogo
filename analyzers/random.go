@@ -40,12 +40,12 @@ func sinkRandomFuncs() (map[string][]int, map[string][]string, map[string]string
 			"crypto/aes": {"NewCipher"},
 		} , map[string]string{
 			"crypto/cipher": "IV is not random",
-			"crypto/rsa": "rsa is not configured with prng",
-			"crypto/dsa": "dsa is not configured with prng",
-			"crypto/ecdsa": "ecdsa is not configured with prng",
-			"golang.org/x/crypto/argon2": "argon2-salt is not random",
-			"golang.org/x/crypto/hkdf": "hkdf-salt is not random",
-			"golang.org/x/crypto/pbkdf2": "pbkdf2-salt is not random",
+			"crypto/rsa": "RSA is not configured with prng",
+			"crypto/dsa": "DSA is not configured with prng",
+			"crypto/ecdsa": "ECDSA is not configured with prng",
+			"golang.org/x/crypto/argon2": "Argon2-salt is not random",
+			"golang.org/x/crypto/hkdf": "HKDF-salt is not random",
+			"golang.org/x/crypto/pbkdf2": "PBKDF2-salt is not random",
 			"golang.org/x/crypto/scrypt": "scrypt-salt is not random",
 			"crypto/aes": "AES-key is not random",
 		}
@@ -123,7 +123,7 @@ func randomRun(pass *analysis.Pass) (interface{}, error) {
 				taintAnalyzer := util.CreateTaintAnalyzer(pass, vulnFunc.Fn.Pos())
 				var taintSource []util.TaintedCode
 				if taintAnalyzer.ContainsTaint(&vulnFunc.Instr.Call, &vulnFunc.Instr.Call.Args[parameterI], call_graph) {
-					message := "Danger: Don't generate or use a predictable initialization Vector (IV) with Cipher Block Chaining (CBC) Mode"
+					message := "Danger: IVs should be unique in CTR, OFB, GCM and XTS mode, and should be random in CBC and CFB mode"
 					targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
 					taintSource = taintAnalyzer.TaintSource
 					results = append(results, util.MakeFinding(message, targetFunc, taintSource, wOutput[pkg]))
@@ -132,7 +132,7 @@ func randomRun(pass *analysis.Pass) (interface{}, error) {
 					if(s=="crypto/cipher") {
 						s = current_function
 					}
-					output := "Generation of Constant IV/key ----" + s
+					output := "Generation of Constant IV/key in " + s
 					message := "Danger: Don't use Constant IV"
 					if !util.Cwelist[output] {
 						util.Cwelist[output] = true

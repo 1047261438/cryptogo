@@ -26,8 +26,8 @@ import (
 // converts all variables to SSA form to construct a call graph and performs
 // recursive taint analysis to search for input sources of user-controllable data
 var SSRFAnalyzer = &analysis.Analyzer{
-	Name:     "SSRF",
-	Doc:      "reports when SSRF vulnerabilities can occur",
+	Name:     "HTTP",
+	Doc:      "Do not use HTTP URL connections",
 	Run:      ssrfRun,
 	Requires: []*analysis.Analyzer{buildssa.Analyzer},
 }
@@ -158,11 +158,11 @@ func ssrfRun(pass *analysis.Pass) (interface{}, error) {
 					if taintCheck(&vulnFunc.Instr.Call.Args[0]) {
 						for i := 1; i < len(vulnFunc.Instr.Call.Args); i++ {
 							if taintAnalyzer.ContainsTaint(&vulnFunc.Instr.Call, &vulnFunc.Instr.Call.Args[i], cg) {
-								message := "Danger: possible SSRF detected"
+								message := "Danger: Do not use HTTP URL connections"
 								targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
 								taintSource := taintAnalyzer.TaintSource
 								if(reuseFlat[vulnFunc.Instr.Call.String()] != true) {
-									results = append(results, util.MakeFinding(message, targetFunc, taintSource, "CWE-918: Server-Side Request Forgery"))
+									results = append(results, util.MakeFinding(message, targetFunc, taintSource, "HTTP URL connections. CWE-918: Server-Side Request Forgery"))
 									reuseFlat[vulnFunc.Instr.Call.String()] = true
 								}
 							}
@@ -171,11 +171,11 @@ func ssrfRun(pass *analysis.Pass) (interface{}, error) {
 				} else {
 					for i := 0; i < len(vulnFunc.Instr.Call.Args); i++ {
 						if taintAnalyzer.ContainsTaint(&vulnFunc.Instr.Call, &vulnFunc.Instr.Call.Args[i], cg) {
-							message := "Danger: possible SSRF detected"
+							message := "Danger: Do not use HTTP URL connections"
 							targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
 							taintSource := taintAnalyzer.TaintSource
 							if(reuseFlat[vulnFunc.Instr.Call.String()] != true) {
-								results = append(results, util.MakeFinding(message, targetFunc, taintSource, "CWE-918: Server-Side Request Forgery"))
+								results = append(results, util.MakeFinding(message, targetFunc, taintSource, "HTTP URL connections. CWE-918: Server-Side Request Forgery"))
 								reuseFlat[vulnFunc.Instr.Call.String()] = true
 							}
 						}

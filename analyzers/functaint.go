@@ -45,31 +45,31 @@ func functaint_out(t util.TaintedCode, function string) (string, string) {
 	output := "NULL"
 	if strings.Contains(t.SourceCode, "P224") {
 		message = "Danger: Don't use the elliptic \" P224 \" if ECDSA is used "
-		output = "ECDSA_P224"
+		output = "ECDSA_P224 - Acceptable but not recommended cryptographic algorithms."
 	} else if strings.Contains(t.SourceCode, "P256") {
 		message = "Best Practice: ECDSA with the elliptic \" P256 \""
-		output = "ECDSA_P256"
+		output = "ECDSA_P256 - Recommended."
 	} else if strings.Contains(t.SourceCode, "P384") {
 		message = "High: High strength may affect performance, best practice is \" ECDSA_P256 \"."
-		output = "ECDSA_P384"
+		output = "ECDSA_P384 - Recommended."
 	} else if strings.Contains(t.SourceCode, "P521") {
 		message = "High: High strength may affect performance, best practice is \" ECDSA_P256 \"."
-		output = "ECDSA_P521"
+		output = "ECDSA_P521 - Recommended."
 	} else if strings.Contains(t.SourceFilename, "md5") {
 		message = "Danger: Don't use HMAC_MD5, best practice is \" HMAC-SHA256 \"."
-		output = "HMAC_MD5"
+		output = "HMAC_MD5 - Acceptable but not recommended cryptographic algorithms."
 	} else if strings.Contains(t.SourceFilename, "sha1") {
 		message = "Best Practice: HMAC_SHA1 can be uesd, and best practice is \" HMAC-SHA256 \"."
-		output = "HMAC_SHA1"
+		output = "HMAC_SHA1 - Recommended."
 	} else if strings.Contains(t.SourceFilename, "sha256") {
 		message = "Best Practice"
-		output = "HMAC_SHA256"
+		output = "HMAC_SHA256 - Recommended."
 	} else if strings.Contains(t.SourceFilename, "sha512") {
 		message = "High: High strength may affect performance, best practice is \" HMAC-SHA256 \"."
-		output = "HMAC_SHA512"
+		output = "HMAC_SHA512 - Recommended."
 	} else if strings.Contains(t.SourceFilename, "sha3") {
 		message = "High: High strength may affect performance, best practice is \" HMAC-SHA256 \"."
-		output = "HMAC_SHA3"
+		output = "HMAC_SHA3 - Recommended."
 	}
 	util.Cwelist[output] = true
 	return message,output
