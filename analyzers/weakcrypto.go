@@ -22,7 +22,7 @@ func weakcryptoFuncs01() (map[string][]string, map[string]string) {
 			"golang.org/x/crypto/md4": {"New", "Sum"},
 			"crypto/md5": {"New", "Sum"},
 			"crypto/sha1": {"New", "Sum"},
-			"math/rand": {"Seed"},
+			//"math/rand": {"Seed"},
 
 
 			"golang.org/x/crypto/blowfish": {"NewCipher"},
@@ -43,7 +43,7 @@ func weakcryptoFuncs01() (map[string][]string, map[string]string) {
 			"crypto/md5": "MD5 - RFC 9155 - Deprecating MD5 and SHA-1 Signature Hashes in TLS 1.2 and DTLS 1.2",
 			"crypto/sha1":"SHA-1 - RFC 9155 - Deprecating MD5 and SHA-1 Signature Hashes in TLS 1.2 and DTLS 1.2",
 
-			"math/rand": "math/rand might be easily predictable regardless ",
+			//"math/rand": "math/rand might be easily predictable regardless ",
 
 			"golang.org/x/crypto/blowfish": "blowfish - Sweet32: Birthday attacks on 64-bit block ciphers in TLS and OpenVPN",
 			"golang.org/x/crypto/cast5": "CAST5 - Sweet32: Birthday attacks on 64-bit block ciphers in TLS and OpenVPN",
