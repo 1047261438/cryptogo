@@ -15,9 +15,6 @@
 package analyzers
 
 import (
-	//"fmt"
-
-	//"github.com/praetorian-inc/gokart/run"	//wening
 	"github.com/praetorian-inc/gokart/util"
 
 	"golang.org/x/tools/go/analysis"
@@ -155,21 +152,11 @@ func ssrfRun(pass *analysis.Pass) (interface{}, error) {
 				//taint since it's not part of the SSRF however, if the control attribute is set on the client then we
 				//know it's safe, and we should never mark it as tainted (even if there is a get with user controlled
 				//input)
-	
-
-				/*fmt.Println("|**********************ssrf.go*************************|")
-				fmt.Println("{",curFunc," : ",vulnFunc,"}")
-				fmt.Println("pass： ",pass)
-				fmt.Println("我以为的位置信息： ",vulnFunc.Fn.Pos())
-				fmt.Println("参数： ",&vulnFunc.Instr.Call)*/
-reuseFlat := make(map[string]bool)
+				reuseFlat := make(map[string]bool)
 
 				if pkg == "(*net/http.Client)" {
 					if taintCheck(&vulnFunc.Instr.Call.Args[0]) {
 						for i := 1; i < len(vulnFunc.Instr.Call.Args); i++ {
-
-							//fmt.Println("条件分支1： ",&vulnFunc.Instr.Call.Args[i])
-
 							if taintAnalyzer.ContainsTaint(&vulnFunc.Instr.Call, &vulnFunc.Instr.Call.Args[i], cg) {
 								message := "Danger: possible SSRF detected"
 								targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
@@ -183,9 +170,6 @@ reuseFlat := make(map[string]bool)
 					}
 				} else {
 					for i := 0; i < len(vulnFunc.Instr.Call.Args); i++ {
-						
-						//fmt.Println("条件分支2： ",&vulnFunc.Instr.Call.Args[i])
-
 						if taintAnalyzer.ContainsTaint(&vulnFunc.Instr.Call, &vulnFunc.Instr.Call.Args[i], cg) {
 							message := "Danger: possible SSRF detected"
 							targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
@@ -197,7 +181,6 @@ reuseFlat := make(map[string]bool)
 						}
 					}
 				}
-			//fmt.Println("|______________________________________________________|")
 			}
 		}
 	}

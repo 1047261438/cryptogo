@@ -35,21 +35,11 @@ import (
 
 var Analyzers = []*analysis.Analyzer{
 	//AllcryptoAnalyzer,
-
 	WeakcryptoAnalyzer,
 	lowLengthAnalyzer,
 	FuncTaintAnalyzer,
 	RandomAnalyzer,
-
-	//ReuseAnalyzer,
-	//RsaKeylenAnalyzer,
-	//AesKeylenAnalyzer,
-	//DsaKeylenAnalyzer,
-	//PathTraversalAnalyzer,
-	//SQLInjectionAnalyzer,
-	//CommandInjectionAnalyzer,
 	SSRFAnalyzer,
-
 	TLSAnalyzer,
 }
 
@@ -63,9 +53,6 @@ func FilterResults(unfilteredResults []util.Finding, parent_dir string) ([]util.
 				finding.Untrusted_Source[i].SourceFilename = strings.TrimPrefix(source.SourceFilename, parent_dir)
 			}
 		}
-
-//		fmt.Println("先看看内容： ",finding)
-//		fmt.Println("这里是否过滤了： ",util.IsValidFinding(finding))
 
 		if util.IsValidFinding(finding) {
 			filteredResults = append(filteredResults, finding)
@@ -203,13 +190,7 @@ func Scan(args []string) ([]util.Finding, error) {
 
 	// fix-up our results to exclude invalid results + shorten long directory names
 	filteredResults, err := FilterResults(results, parent_dir)
-/*
-	fmt.Println("检测检测检测检测检测检测检测检测检测检测检测检测检测")
-	for _, rrr := range filteredResults {
-		fmt.Println(rrr)
-	}
-	fmt.Println("over~over~over~over~over~over~over~over~over~over~")
-*/
+	
 	if err != nil {
 		log.Fatal(err)
 	}

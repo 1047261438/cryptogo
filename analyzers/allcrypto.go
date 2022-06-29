@@ -1,8 +1,7 @@
-/*wening —— weakcrypto*/
 package analyzers
 
 import (
-	"github.com/praetorian-inc/gokart/run"	//wening
+	"github.com/praetorian-inc/gokart/run"
 	"github.com/praetorian-inc/gokart/util"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/buildssa"
@@ -16,9 +15,9 @@ var AllcryptoAnalyzer = &analysis.Analyzer{
 }
 
 // allcryptoFuncs() returns a map of functions that weakcryptos are used
-func allcryptoFuncs() (map[string][]string, map[string]string) {	//写map是因为它不按顺序输出，只能查找键。。。
-	return map[string][]string{	//函数名
-			"crypto/des": {"NewCipher", "NewTripleDESCipher"},	//还需要考虑一下2tdea和3tdea怎么区分
+func allcryptoFuncs() (map[string][]string, map[string]string) {
+	return map[string][]string{
+			"crypto/des": {"NewCipher", "NewTripleDESCipher"},
 			"crypto/rc4": {"NewCipher"},
 			"golang.org/x/crypto/md4": {"New", "Sum"},
 			"crypto/md5": {"New", "Sum"},
@@ -35,16 +34,16 @@ func allcryptoFuncs() (map[string][]string, map[string]string) {	//写map是因�
 			"NewLegacyKeccak256", "NewLegacyKeccak512", "ShakeSum128", "ShakeSum256"},
 			"golang.org/x/crypto/ripemd160": {"New"},
 
-			"crypto/cipher": {"NewCBCEncrypter", "NewCFBEncrypter","NewOFB", "NewCTR", "NewGCM"},	//建议：CBC的lucky13攻击，考虑一下吧；CFB的iv要不可预测；OFB不允许重用iv；CTR要检查计数器块	//CBC的iv要不可预测已经实现了
+			"crypto/cipher": {"NewCBCEncrypter", "NewCFBEncrypter","NewOFB", "NewCTR", "NewGCM"},
 			"golang.org/x/crypto": {"NewCipher"},
-			"crypto/rsa": {"GenerateKey", "SignPKCS1v15", "EncryptPKCS1v15", "EncryptOAEP", "SignPSS"},	//不推荐RSAES-PKCS1-v1_5、RSASSA-PKCS1-v1_5;推荐RSAES-OAEP、RSASSA-PSS;
-			"crypto/elliptic": {"P224", "P256", "P384", "P512"},	//这里要斟酌实现形式，是使用就有问题，还是在ecdsaa里面使用有问题
-			"golang.org/x/crypto/bn256": {"G1", "G2", "GT"},	//弃用
-			"golang.org/x/crypto/argon2": {"Key", "IDKey"},	//密钥派生函数，第2个参数是盐值
-			"golang.org/x/crypto/bcrypt": {"GenerateFromPassword", "newFromHash", "bcrypt"},	//密钥派生函数
-			"golang.org/x/crypto/hkdf": {"Extract", "New"},	//密钥派生函数，第3个参数是盐值
-			"golang.org/x/crypto/pbkdf2": {"Key"},	//密钥派生函数，第2个参数是盐值
-			"golang.org/x/crypto/scrypt": {"Key"},	//密钥派生函数，第2个参数是盐值
+			"crypto/rsa": {"GenerateKey", "SignPKCS1v15", "EncryptPKCS1v15", "EncryptOAEP", "SignPSS"},
+			"crypto/elliptic": {"P224", "P256", "P384", "P512"},
+			"golang.org/x/crypto/bn256": {"G1", "G2", "GT"},
+			"golang.org/x/crypto/argon2": {"Key", "IDKey"},
+			"golang.org/x/crypto/bcrypt": {"GenerateFromPassword", "newFromHash", "bcrypt"},
+			"golang.org/x/crypto/hkdf": {"Extract", "New"},
+			"golang.org/x/crypto/pbkdf2": {"Key"},
+			"golang.org/x/crypto/scrypt": {"Key"},
 
 			"crypto/aes": {"NewCipher"},
 			"crypto/dsa": {"GenerateParameters"},
@@ -57,14 +56,14 @@ func allcryptoFuncs() (map[string][]string, map[string]string) {	//写map是因�
 			"golang.org/x/crypto/blake2s": {"New128", "New256", "Sum256"},
 			"golang.org/x/crypto/chacha20": {"HChaCha20"},
 			"golang.org/x/crypto/chacha20poly1305": {"New", "NewX"},
-			"golang.org/x/crypto/curve25519": {"ScalarBaseMult", "ScalarMult", "X25519"},	//ScalarMult弃用
-			"golang.org/x/crypto/pkcs12": {"Decode", "ToPEM"},	//pkcs12弃用
-			"golang.org/x/crypto/poly1305": {"Sum", "Verify"},	//poly1305弃用
+			"golang.org/x/crypto/curve25519": {"ScalarBaseMult", "ScalarMult", "X25519"},
+			"golang.org/x/crypto/pkcs12": {"Decode", "ToPEM"},
+			"golang.org/x/crypto/poly1305": {"Sum", "Verify"},
 			"golang.org/x/crypto/salsa20": {"XORKeyStream"},
 			"golang.org/x/crypto/xts": {"NewCipher"},
 			"golang.org/x/crypto/internal/poly1305": {"Sum", "Verify"},
 
-		} , map[string]string{	//警告信息
+		} , map[string]string{
 			"crypto/des": "NIST Withdraws Outdated Data Encryption Standard - DES",
 			"crypto/rc4": "RFC 7465 - Prohibiting RC4 Cipher Suites",
 			"golang.org/x/crypto/md4": "RFC 6150 - MD4 to Historic Status",
@@ -86,11 +85,11 @@ func allcryptoFuncs() (map[string][]string, map[string]string) {	//写map是因�
 			"crypto/rsa": "CWE-rsa-padding5",
 			"crypto/elliptic":"P-224/P-256/P-384",
 			"golang.org/x/crypto/bn256":"This package is frozen, and not implemented in constant time.",
-			"golang.org/x/crypto/argon2": "argon2",	//密钥派生函数
-			"golang.org/x/crypto/bcrypt": "bcrypt",	//密钥派生函数
-			"golang.org/x/crypto/hkdf": "hkdf",	//密钥派生函数
-			"golang.org/x/crypto/pbkdf2": "pbkdf2",	//密钥派生函数
-			"golang.org/x/crypto/scrypt": "scrypt",	//密钥派生函数
+			"golang.org/x/crypto/argon2": "argon2",
+			"golang.org/x/crypto/bcrypt": "bcrypt",
+			"golang.org/x/crypto/hkdf": "hkdf",
+			"golang.org/x/crypto/pbkdf2": "pbkdf2",
+			"golang.org/x/crypto/scrypt": "scrypt",
 			
 			"crypto/aes": "aes",
 			"crypto/dsa": "dsa",
@@ -103,9 +102,9 @@ func allcryptoFuncs() (map[string][]string, map[string]string) {	//写map是因�
 			"golang.org/x/crypto/blake2s": "blake2s",
 			"golang.org/x/crypto/chacha20": "chacha20",
 			"golang.org/x/crypto/chacha20poly1305": "chacha20poly1305",
-			"golang.org/x/crypto/curve25519": "ScalarMult弃用",	//ScalarMult弃用
-			"golang.org/x/crypto/pkcs12": "弃用",
-			"golang.org/x/crypto/poly1305": "弃用",
+			"golang.org/x/crypto/curve25519": "ScalarMult is deprecated",
+			"golang.org/x/crypto/pkcs12": "pkcs12 is deprecated",
+			"golang.org/x/crypto/poly1305": "poly1305 is deprecated",
 			"golang.org/x/crypto/salsa20": "salsa20",
 			"golang.org/x/crypto/xts": "xts",
 			"golang.org/x/crypto/internal/poly1305": "【poly1305】",
@@ -122,24 +121,20 @@ func allcryptoRun(pass *analysis.Pass) (interface{}, error) {
 	// Fills in call graph
 	if !run.CGFlat {	//wening
 		// Builds SSA model of Go code
-		ssa_functions := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA).SrcFuncs	//这里调用了一下传进来的所有自定义函数名
+		ssa_functions := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA).SrcFuncs
 
-		//fmt.Println("***************")
-		for _, fn := range ssa_functions { //所以这一步是在构造调用图对吗 —— 对
+		for _, fn := range ssa_functions {
 			cg.AnalyzeFunctionO(fn)
 		}
-		//fmt.Println("**",cg,"**")
 		run.CG = cg
 	} else {
-		cg = run.CG //wening
+		cg = run.CG
 	}
 
-	//初始化 不能清空
 	//util.Cwelist = make(map[string]bool)
 
 	// Grabs vulnerable functions to scan for
 	all, wOutput := allcryptoFuncs()
-	//填充cwe列表
 	for _, output := range wOutput{
 		if !util.Cwelist[output] {
 			util.Cwelist[output] = true
@@ -153,7 +148,7 @@ func allcryptoRun(pass *analysis.Pass) (interface{}, error) {
 			// Construct full name of function
 			current_function := pkg + "." + fn
 			// Iterate over occurrences of vulnerable function in call graph
-			for _, vulnFunc := range cg[current_function] {	//通过头文件.函数名，查找调用图中对应的 CGRelation{*ssa.Call，*ssa.Function}
+			for _, vulnFunc := range cg[current_function] {
 
 				message := "all use "
 				targetFunc := util.GenerateTaintedCode(pass, vulnFunc.Fn, vulnFunc.Instr.Pos())
