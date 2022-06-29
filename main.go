@@ -18,13 +18,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/praetorian-inc/gokart/cmd"
+	"github.com/1047261438/cryptogo/cmd"
 )
 
 func main() {
 	err := cmd.Execute()
 	if err != nil {
-		fmt.Printf("\nError: %s\n\nTry \"gokart help\" to steer GoKart in the right direction.\n\n", err)
+		fmt.Printf("\nError: %s\n\nTry \"cryptogo help\" to steer CryptoGo in the right direction.\n\n", err)
 		os.Exit(1)
 	}
 }

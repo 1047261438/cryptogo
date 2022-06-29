@@ -3,6 +3,6 @@
 FROM golang:1.16-alpine
 WORKDIR /app
 COPY . /app/
-RUN go build -o /gokart
+RUN go build -o /cryptogo
 
-ENTRYPOINT [ "/gokart" ]
+ENTRYPOINT [ "/cryptogo" ]

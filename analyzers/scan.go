@@ -28,8 +28,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/praetorian-inc/gokart/run"
-	"github.com/praetorian-inc/gokart/util"
+	"github.com/1047261438/cryptogo/run"
+	"github.com/1047261438/cryptogo/util"
 	"golang.org/x/tools/go/analysis"
 )
 
@@ -118,7 +118,7 @@ func Scan(args []string) ([]util.Finding, error) {
 		fmt.Printf("\nRevving engines VRMMM VRMMM\n3...2...1...Go!\n")
 	}
 	// If we're given a target path, we do some slight changes to make sure that
-	// gokart will behave as expected. Specifically we turn the path into an absolute
+	// cryptogo will behave as expected. Specifically we turn the path into an absolute
 	// path, and then we append /... to the end to make sure the package loading is recursive.
 	// Finally we update the current working directory to the target
 	// In order to not cause issues we set the working directory back after we are done scanning.
@@ -204,14 +204,14 @@ func Scan(args []string) ([]util.Finding, error) {
 	// Don't print out messages if JSON or SARIF output
 	if !(util.Config.OutputSarif || util.Config.OutputJSON) && success {
 		fmt.Println("\nRace Complete! Analysis took", scan_time, "and", util.FilesFound, "Go files were scanned (including imported packages)")
-		fmt.Printf("GoKart found %d potentially vulnerable functions\n", len(filteredResults))
+		fmt.Printf("CryptoGo found %d potentially vulnerable functions\n", len(filteredResults))
 		// display information about all findings
 		util.OutputFindingMetadata(filteredResults, true)
 	}
 	os.Chdir(current_dir)
 
 	if !success {
-		return nil, errors.New("gokart could not find any packages to scan")
+		return nil, errors.New("cryptogo could not find any packages to scan")
 	}
 
 	return filteredResults, nil

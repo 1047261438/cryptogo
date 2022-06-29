@@ -21,14 +21,14 @@ import (
 
 var (
 	goKartCmd = &cobra.Command{
-		Use:   "gokart scan",
+		Use:   "cryptogo scan",
 		Short: "A static analysis security scanner for Go",
 		Long: dedent.Dedent(`
 		╭────────────────────────── GoKart ──────────────────────────╮
 		│                                                            │
 		│   An open-source static analysis security scanner for Go   │
 		│                                                            │
-		│           https://github.com/praetorian-inc/gokart         │
+		│           https://github.com/1047261438/cryptogo      │
 		│                                                            │
 		╰────────────────────────────────────────────────────────────╯
 		
@@ -37,20 +37,20 @@ var (
 		│                                                            │
 		│           	Recursively scan current directory           │
 		│  ──────────────────────────────────────────────────────    │
-		│  $ gokart scan <flags>                                     │
+		│  $ cryptogo scan <flags>                                     │
 		│                                                            │
 		│                   Scan specific directory                  │
 		│  ──────────────────────────────────────────────────────    │
-		│  $ gokart scan <directory> <flags>                         │
+		│  $ cryptogo scan <directory> <flags>                         │
 		│                                                            │
 		│                     Get info about flags                   │
 		│  ──────────────────────────────────────────────────────    │
-		│  $ gokart scan -h                                          │
+		│  $ cryptogo scan -h                                          │
 		│                                                            │
 		╰────────────────────────────────────────────────────────────╯
 	
 		Please report any bugs or feature requests by opening a new
-		issue at https://github.com/praetorian-inc/gokart`),
+		issue at https://github.com/1047261438/cryptogo`),
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}

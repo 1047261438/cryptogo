@@ -26,7 +26,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// ConfigType stores booleans for GoKart analysis configuration
+// ConfigType stores booleans for CryptoGo analysis configuration
 type ConfigType struct {
 	GlobalsSafe bool
 	OutputSarif bool
@@ -157,9 +157,9 @@ func InitConfig(globals bool, sarif bool, json bool, verbose bool, debug bool, o
 func getDefaultConfigPath() string {
 	setConfigDir()
 	yamlPath := filepath.Join(configDir, "analyzers.yml")
-	//yamlPath =  /root/.gokart/analyzers.yml
+	//yamlPath =  /root/.cryptogo/analyzers.yml
 
-	// If ~/.gokart/analyzers.yml doesn't exist, create it with the default config
+	// If ~/.cryptogo/analyzers.yml doesn't exist, create it with the default config
 	if _, err := os.Stat(yamlPath); os.IsNotExist(err) {
 		fmt.Printf("Initializing default config at %s\n", yamlPath)
 		if err := ioutil.WriteFile(yamlPath, DefaultAnalyzersContent, 0o744); err != nil {
@@ -184,7 +184,7 @@ func setConfigDir() {
 		if err != nil {
 			log.Fatalf("failed to get home directory: %v", err)
 		}
-		configDir = filepath.Join(userHomeDir, ".gokart")
+		configDir = filepath.Join(userHomeDir, ".cryptogo")
 		if err = os.MkdirAll(configDir, 0o744); err != nil {
 			log.Fatalf("failed to create config directory %s: %v", configDir, err)
 		}

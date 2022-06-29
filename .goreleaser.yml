@@ -18,9 +18,9 @@ before:
     - go mod download
 builds:
   -
-    id: gokart
+    id: cryptogo
     main: ./main.go
-    binary: gokart
+    binary: cryptogo
     env:
       - CGO_ENABLED=0
     goos:

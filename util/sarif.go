@@ -31,7 +31,7 @@ func InitSarifReporting() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	SarifRun = sarif.NewRun("GoKart", "https://github.com/praetorian-inc/gokart")
+	SarifRun = sarif.NewRun("CryptoGo", "https://github.com/1047261438/cryptogo")
 }
 
 func SarifRecordFinding(type_ string, message string, filename string, lineNumber int) {

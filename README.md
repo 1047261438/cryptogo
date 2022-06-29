@@ -15,13 +15,13 @@ $ go install github.com/1047261438/cryptogo
 Extract the downloaded archive
 
 ```shell
-$ tar -xvf gokart_${VERSION}_${ARCH}.tar.gz
+$ tar -xvf cryptogo_${VERSION}_${ARCH}.tar.gz
 ```
 
-Move the `gokart` binary into your path:
+Move the `cryptogo` binary into your path:
 
 ```shell
-$ mv ./gokart /usr/local/bin/
+$ mv ./cryptogo /usr/local/bin/
 ```
 
 ### Clone and build yourself
@@ -31,11 +31,11 @@ $ mv ./gokart /usr/local/bin/
 $ git clone https://github.com/1047261438/cryptogo.git
 
 # navigate into the repo directory and build
-$ cd gokart
+$ cd cryptogo
 $ go build
 
-# Move the gokart binary into your path
-$ mv ./gokart /usr/local/bin
+# Move the cryptogo binary into your path
+$ mv ./cryptogo /usr/local/bin
 ```
 
 ## Usage
@@ -44,17 +44,17 @@ $ mv ./gokart /usr/local/bin
 
 ```shell
 # running without a directory specified defaults to '.'
-gokart scan <flags>
+cryptogo scan <flags>
 ```
 
 ### Scan a Go module in a different directory
 
 ```shell
-gokart scan <directory> <flags> 
+cryptogo scan <directory> <flags> 
 ```
 
 ### Get Help
 
 ```shell
-gokart help
+cryptogo help
 ```

@@ -17,7 +17,7 @@ package analyzers
 import (
 	"testing"
 
-	"github.com/praetorian-inc/gokart/test/testutil"
+	"github.com/1047261438/cryptogo/test/testutil"
 )
 
 func TestSSRF(t *testing.T) {

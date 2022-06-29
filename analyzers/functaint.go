@@ -1,8 +1,8 @@
 package analyzers
 import (
 	"strings"
-	"github.com/praetorian-inc/gokart/run"
-	"github.com/praetorian-inc/gokart/util"
+	"github.com/1047261438/cryptogo/run"
+	"github.com/1047261438/cryptogo/util"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/buildssa"

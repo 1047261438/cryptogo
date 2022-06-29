@@ -22,8 +22,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/praetorian-inc/gokart/analyzers"
-	"github.com/praetorian-inc/gokart/util"
+	"github.com/1047261438/cryptogo/analyzers"
+	"github.com/1047261438/cryptogo/util"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +54,7 @@ var scanCmd = &cobra.Command{
 	Use:   "scan [flags] [directory]",
 	Short: "Scans a Go module directory",
 	Long: `
-Scans a Go module directory. To scan the current directory recursively, use gokart scan. To scan a specific directory, use gokart scan <directory>.`,
+Scans a Go module directory. To scan the current directory recursively, use cryptogo scan. To scan a specific directory, use cryptogo scan <directory>.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		sarif, _ := cmd.Flags().GetBool("sarif")
 		json, _ := cmd.Flags().GetBool("json")
@@ -65,7 +65,7 @@ Scans a Go module directory. To scan the current directory recursively, use goka
 		util.InitConfig(globals, sarif, json, verbose, debug, outputPath, yml, exitCode)
 		// If remoteModule was set, clone the remote repository and scan it
 		if len(remoteModule) != 0 {
-			moduleTempDir, err := ioutil.TempDir(".", "gokart")
+			moduleTempDir, err := ioutil.TempDir(".", "cryptogo")
 			if err != nil {
 				log.Fatal("Error creating temporary directory: ", err.Error())
 			}

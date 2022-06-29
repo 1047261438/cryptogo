@@ -22,7 +22,7 @@ import (
 	"go/token"
 	"os"
 
-	"github.com/praetorian-inc/gokart/util"
+	"github.com/1047261438/cryptogo/util"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/buildssa"
 	"golang.org/x/tools/go/packages"
@@ -79,7 +79,7 @@ func LoadPackages(packagesList ...string) ([]*packages.Package, bool, error) {
 	})
 	// Print error message if a package was unable to be loaded
 	if len(badpkgs) > 0 {
-		fmt.Fprintf(os.Stderr, "\nUh oh, a dashboard light is on! GoKart was unable to load the following packages: \n")
+		fmt.Fprintf(os.Stderr, "\nUh oh, a dashboard light is on! CryptoGo was unable to load the following packages: \n")
 		hadBadpkgs = true
 	}
 
@@ -94,8 +94,8 @@ func LoadPackages(packagesList ...string) ([]*packages.Package, bool, error) {
 	}
 	// Print error mssage if no scannable packages are found
 	if len(pkgs) == 0 {
-		fmt.Fprintf(os.Stderr, "CRASH! GoKart didn't find any files to scan! Make sure the usage is correct to get GoKart back on track. \n"+
-			"If the usage appears to be correct, try pointing gokart at the directory from where you would run 'go build'. \n")
+		fmt.Fprintf(os.Stderr, "CRASH! CryptoGo didn't find any files to scan! Make sure the usage is correct to get CryptoGo back on track. \n"+
+			"If the usage appears to be correct, try pointing cryptogo at the directory from where you would run 'go build'. \n")
 		success = false
 	}
 	return pkgs, success, nil
